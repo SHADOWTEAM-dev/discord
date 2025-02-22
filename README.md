@@ -1,5 +1,7 @@
 # Discord Token Tools!
 
+**Still in development!**
+
 This Python program provides a set of tools for working with Discord tokens. You can validate your Discord token, retrieve user information, and perform various Discord API operations.
 
 `⚠️EDUCATIONAL PURPOSES ONLY`
