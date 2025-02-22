@@ -168,7 +168,7 @@ def menu():
             console.print("[bold red]It should look like this : https://discord.com/api/v9/channels/XXXXXXXXXXXXXXXXXX/messages[/]")
             url = console.input("[bold green]Enter a channel URL [bold red](User must be on the server!)[bold green] :[/] ")
             mesaj = {
-                'content': "**SHADOWTEAM** wanna use the program? : https://github.com/SHADOWTEAM-dev/discord @everyone @here"
+                'content': "**SHADOWTEAM** wanna use the program? : https://example.com @everyone @here"
             }
 
             tkn = console.input("[bold green]Enter Token [bold black](Dont know? Check this: https://github.com/piotr-ginal/discord-token-grabber) [bold green]: [/]")
@@ -178,7 +178,7 @@ def menu():
             tekrar_sayisi = int(console.input("[bold green]How many times do you want to send the message? : [/]"))
             for _ in range(tekrar_sayisi):
                 response = requests.post(url, headers=token, data=mesaj)
-                console.print(f"İstek gönderildi! Durum kodu: {response.status_code}")
+                console.print(f"Request sent! Status code: {response.status_code}")
 
         elif choice == "2":
             clear()
@@ -194,12 +194,22 @@ def menu():
         elif choice == "4":
             clear()
             subprocess.run(['python', 'generator.py'])
+        elif choice == "5":
+            clear()
+            console.print("[bold cyan]Spam Webhook Selected[/]")
+            webhook_url = console.input("[bold green]Enter the webhook URL: [/]")
+            num_messages = int(console.input("[bold green]Enter the number of messages to send: [/]"))
+
+            for _ in range(num_messages):
+                payload = {"content": "SHADOWTEAM wanna use the program? : https://github.com/SHADOWTEAM-dev/discord @everyone @here"}
+                response = requests.post(webhook_url, json=payload)
+                console.print(f"Message sent! Status code: {response.status_code}")
 
         elif choice == "0":
-            console.print("\n[bold yellow]Çıkış yapılıyor...[/]")
+            console.print("\n[bold yellow]Exiting...[/]")
             time.sleep(0.4)
             break
 
-        input("\nDevam etmek için Enter'a bas...")
+        input("\nPress ENTER to continue...")
 
 menu()
