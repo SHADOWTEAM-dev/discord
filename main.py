@@ -25,14 +25,14 @@ def login_with_token(token):
 
     if response.status_code == 200:
         console.print("[bold green]Login Successful! The token is valid.[/]")
-        get_token_info(token)  # Token bilgilerini göster
+        get_token_info(token)  # Show token information
     else:
         console.print(f"[bold red]Invalid token! Status Code: {response.status_code}[/]")
 
 
 console = Console()
 
-# Badge değerleri
+# Badge values
 BADGE_INFO = {
     1 << 0: ("🏅 Discord Staff", "good"),
     1 << 1: ("💠 Partnered Server Owner", "good"),
@@ -42,9 +42,15 @@ BADGE_INFO = {
     1 << 7: ("🏅 HypeSquad Brilliance", "bad"),
     1 << 8: ("🏅 HypeSquad Balance", "bad"),
     1 << 9: ("💎 Early Supporter", "good"),
-    1 << 10: ("🛠️ Verified Bot Developer", "good"),
+    1 << 10: ("🛠️ Verified Bot Developer", "bad"),
+    1 << 11: ("🤖 Discord Bot", "bad"),
+    1 << 12: ("🔵 System User", "good"),
+    1 << 13: ("🎖️ Bug Hunter Level 2", "good"),
     1 << 14: ("🛡️ Discord Certified Moderator", "good"),
     1 << 17: ("⚙️ Active Developer", "good"),
+    1 << 18: ("🎖️ Discord Employee", "good"),
+    1 << 19: ("🌟 Quests Beta Tester", "good"),
+    1 << 20: ("🏆 Finished a Quest", "bad"),
 }
 
 def get_user_badges(flags):
@@ -76,17 +82,15 @@ def get_token_info(token):
     if response.status_code == 200:
         user_info = response.json()
 
-        # E-posta maskeleme
         email = user_info.get('email', 'Not available')
         masked_email = email[0] + "****@" + email.split("@")[1] if email != "Not available" else email
 
-        # Telefon numarası maskeleme (Son 4 hane açık)
         phone = user_info.get('phone')
         masked_phone = "Not available"
         if phone:
             masked_phone = "*" * (len(phone) - 4) + phone[-4:]
-       
-        # Kullanıcı nitro sahibi mi?
+
+        # Does the user own nitro?
         premium_type = user_info.get('premium_type', 0)
 
         if premium_type == 0:
@@ -98,7 +102,7 @@ def get_token_info(token):
         else:
             nitro_status = "Unknown"
 
-        # Badge'leri çek
+        # Get the badges
         public_flags = user_info.get('public_flags', 0)
         good_badges, bad_badges, neutral_badges = get_user_badges(public_flags)
 
@@ -112,9 +116,15 @@ def get_token_info(token):
         console.print(f"[bold gray]Nitro Type:[/] {nitro_status}")
         console.print(f"[bold gray]MFA Enabled:[/] {user_info.get('mfa_enabled', False)}")
         console.print(f"[bold gray]Verified:[/] {user_info.get('verified', False)}")
+    # Previous username
+        console.print(f"[bold gray]Former Username:[/] {user_info.get('legacy_username', 'None')}")
+
+    # Quests
+        quests = user_info.get('user_achievements', [])
+        console.print(f"[bold gray]Quests Completed:[/] {', '.join(quests) if quests else 'No quests completed'}")
 
 
-        # Badge gösterimi
+        # Badges
         if not (good_badges or bad_badges or neutral_badges):  # Hiç badge yoksa
             console.print("[bold yellow]No badges found.[/]")
         else:
@@ -132,7 +142,6 @@ def menu():
     while True:
         clear()
 
-        # ASCII ART
         ascii_art = Text("""
 ███████╗██╗  ██╗ █████╗ ██████╗  ██████╗ ██╗    ██╗████████╗███████╗ █████╗ ███╗   ███╗
 ██╔════╝██║  ██║██╔══██╗██╔══██╗██╔═══██╗██║    ██║╚══██╔══╝██╔════╝██╔══██╗████╗ ████║
@@ -144,9 +153,9 @@ def menu():
 
         console.print(ascii_art, justify="center")
 
-        # Menü seçenekleri
+        # Menu
         options = [
-            "[bold cyan]1[/] - [bold]🔥⬆️ Bomb Account[/]",
+            "[bold cyan]1[/] - [bold]🔥 Bomb Account[/]",
             "[bold cyan]2[/] - [bold]🔥 Token Info[/]",
             "[bold cyan]3[/] - [bold]⏳ Login with Token[/]",
             "[bold cyan]4[/] - [bold]⏳ Token Generator[/]",
@@ -178,7 +187,7 @@ def menu():
             tekrar_sayisi = int(console.input("[bold green]How many times do you want to send the message? : [/]"))
             for _ in range(tekrar_sayisi):
                 response = requests.post(url, headers=token, data=mesaj)
-                console.print(f"Request sent! Status code: {response.status_code}")
+                console.print(f"Request Sent! Status code: {response.status_code}")
 
         elif choice == "2":
             clear()
