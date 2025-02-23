@@ -8,7 +8,6 @@ import rich
 from rich.console import Console
 from colorama import Fore
 
-# Banner and console setup
 banner = (Fore.BLUE + """
          ███████╗██╗  ██╗ █████╗ ██████╗  ██████╗ ██╗    ██╗████████╗███████╗ █████╗ ███╗   ███╗
          ██╔════╝██║  ██║██╔══██╗██╔══██╗██╔═══██╗██║    ██║╚══██╔══╝██╔════╝██╔══██╗████╗ ████║
@@ -27,7 +26,6 @@ generate = (Fore.BLUE + """
 ╚══════╝   ╚═╝        ╚═════╝ ╚══════╝╚═╝  ╚═══╝
 """)
 
-# Spinner function for loading animation
 def spinner():
     l = ['|', '/', '-', '\\']
     for i in l + l + l:
@@ -41,7 +39,7 @@ def spinner():
 count = 0
 current_path = os.path.dirname(os.path.realpath(__file__))
 
-# New Menu Code
+# Menu
 console = Console()
 
 print(banner)
@@ -54,7 +52,6 @@ options = [
     "[bold red]0[/] - [bold]Exit[/]"
 ]
 
-# Display the menu
 panel = rich.panel.Panel("\n".join(options),
                          title="[bold red]Select an option[/]",
                          border_style="blue",
@@ -62,10 +59,8 @@ panel = rich.panel.Panel("\n".join(options),
 console.print(panel, justify="center")
 
 
-# User input for menu choice
 choice = console.input("[bold green]Enter your choice:[/] ")
 
-# Handle menu actions
 if choice == '1':
     print(generate)
     GAmount = int(input("\nAmount to generate: "))
